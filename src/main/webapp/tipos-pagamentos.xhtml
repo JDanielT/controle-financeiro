@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tipos de Pagamentos</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="index.xhtml"> 
+            <ui:define name="conteudo">
+                <div class="panel-heading">Tipos de Pagamentos</div>
+                <div class="panel-body">
+
+                    <h:form id="formTiposPagamentos" 
+                            prependId="false" >
+
+                        <h:messages styleClass="alert"
+                                    errorClass="alert-danger"
+                                    infoClass="alert-info"
+                                    warnClass="alert-warning" />
+
+                        <h:commandButton value="Novo"
+                                         styleClass="btn btn-primary"
+                                         style="margin-bottom: 10px"
+                                         action="#{tipoPagamentoBean.irParaPaginaCadastroEdicao()}" />
+
+                        <h:dataTable value="#{tipoPagamentoBean.itens}"
+                                     var="tipoPagamento" 
+                                     styleClass="table table-responsive table-responsive-action">
+                            <h:column>
+                                <f:facet name="header">
+                                    Descrição
+                                </f:facet>
+                                <h:outputText value="#{tipoPagamento.descricao.toUpperCase()}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Opções
+                                </f:facet>
+                                <div>
+                                    <h:link style="margin-right: 5px"
+                                            outcome="tipo-pagamento.xhtml?id=#{tipoPagamento.id}" >
+                                        <i class="fa fa-lg fa-pencil-square-o"></i>
+                                    </h:link>
+                                    <h:commandLink onclick="return confirm('Deseja realmente excluir esse registro?');"
+                                                   action="#{tipoPagamentoBean.excluir}">
+                                        <i class="fa fa-lg fa-times"></i>
+                                        <f:setPropertyActionListener value="#{tipoPagamento}"
+                                                                     target="#{tipoPagamentoBean.entity}" />
+                                    </h:commandLink>
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+
+                    </h:form>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

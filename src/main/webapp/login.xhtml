@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" >
+    <h:head>
+        <title>Controle financeiro - Autenticação</title>
+        
+        <h:outputStylesheet library="css" name="default.css"  />
+        <h:outputStylesheet library="css" name="bootstrap.min.css"  />
+        <h:outputStylesheet library="css" name="footer.css"  />
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+        
+        <style type="text/css">
+            .form-signin {
+                margin: 0 auto;
+                max-width: 330px; 
+                padding: 15px;
+            }
+        </style>
+        <link rel="shortcut icon" 
+              type="image/png" 
+              href="resources/imgs/logo.png" />
+    </h:head>
+    <h:body style="padding-top: 35px; background-color: #eee;">
+
+        <h:form id="form" 
+                styleClass="form-signin" >
+
+            <div class="div-imagem" >
+                <center>
+                    <h:graphicImage library="imgs" name="logo.png" alt="JBS SISTEMAS" /> 
+                    <br/>
+                    <h:outputText style="font-size: 18px; font: sans-serif"
+                                  value="Portfólio - Autenticação" />
+                </center>
+            </div>
+
+            <div class="container" style="width: 300px" >
+
+                <h:messages id="msg"
+                            styleClass="mensagem alert-warning" />
+
+                <h:inputText value="#{acessoBean.loginOuEmail}"
+                             pt:autofocus="true"
+                             pt:placeholder="Login ou email"
+                             pt:required="true"
+                             required="true"
+                             requiredMessage="O campo email é requerido"
+                             styleClass="form-control" />
+
+                <h:inputSecret value="#{acessoBean.senha}"
+                               pt:placeholder="Senha"
+                               pt:required="true"
+                               required="true"
+                               requiredMessage="O senha email é requerido"
+                               styleClass="form-control"
+                               style="margin-top: 3px" />
+
+                <br/>
+
+                <h:commandButton value="entrar"
+                                 styleClass="btn btn-primary"
+                                 style="width: 100%"
+                                 action="#{acessoBean.logar()}"
+                                 />
+
+                <div style="float: left; margin-top: 5px">
+
+                    <div>
+                        <i class="fa fa-unlock-alt" style="margin-right: 5px" />
+                        <h:link value="Esqueceu a senha?"
+                                outcome="redefinicao-senha.xhtml"
+                                />
+                    </div>
+
+                </div>
+
+            </div>
+
+        </h:form>
+
+    </h:body>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                <font style="font-size: small">
+                    Controle financeiro - Desenvolvido por 
+                    <a href="https://www.linkedin.com/pub/daniel-tavares/50/85b/696"
+                       target="_blanck">Daniel Tavares</a>
+                </font>
+            </p>
+        </div>
+    </footer>
+
+</html>
+

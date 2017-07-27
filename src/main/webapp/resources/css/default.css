@@ -1,0 +1,55 @@
+/* 
+    Created on : 28/04/2015, 11:55:59
+    Author     : daniel
+*/
+.font{
+    color: #00A69C;
+}
+
+.btn-primary {
+    color: 00A69C;
+    background-image: linear-gradient(to bottom, #00A69C 0px, #00A69C 100%) !important;
+    background-color: linear-gradient(to bottom, #00A69C 0px, #00A69C 100%) !important;
+    border-color: linear-gradient(to bottom, #00A69C 0px, #00A69C 100%) !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #00A69C !important;
+    background-position: 0 -15px;
+}
+
+a{
+    color: #00A69C !important;
+}
+
+input[type=submit] {
+    width: 80px;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+img {
+    width: 150px !important;
+    width: 90px !important;
+    border-radius: 25px;
+}
+
+.logo-barra{
+    width: 45px !important;
+    margin-top: 2.4px;
+    margin-left: 2px;
+    margin-right: 15px;
+}
+
+.div-imagem{
+    max-width: 600px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.mensagem{
+    padding-top: 5px; 
+    height: 30px;
+    border-radius: 10px;
+}

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f2b980b-9195-4a65-bd22-d7b70536e43d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATA_INICIAL" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATA_FINAL" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/daniel/NetBeansProjects/controle-financeiro/web/WEB-INF/relatorios/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     tipo_pagamento."descricao" AS tipo_pagamento_descricao,
+     tipo_pagamento."id" AS tipo_pagamento_id,
+     pagamento."data_pagamento" AS pagamento_data_pagamento,
+     pagamento."data_vencimento" AS pagamento_data_vencimento,
+     pagamento."descricao" AS pagamento_descricao,
+     pagamento."valor" AS pagamento_valor,
+     pagamento."valor_pago" AS pagamento_valor_pago
+FROM
+     "public"."tipo_pagamento" tipo_pagamento INNER JOIN "public"."pagamento" pagamento ON tipo_pagamento."id" = pagamento."tipo_pagamento_id"
+
+WHERE (pagamento.data_pagamento BETWEEN $P{DATA_INICIAL} AND $P{DATA_FINAL}) OR (pagamento.data_vencimento  BETWEEN $P{DATA_INICIAL} AND $P{DATA_FINAL})
+ORDER BY tipo_pagamento.id
+]]>
+	</queryString>
+	<field name="tipo_pagamento_descricao" class="java.lang.String"/>
+	<field name="tipo_pagamento_id" class="java.lang.Integer"/>
+	<field name="pagamento_data_pagamento" class="java.sql.Date"/>
+	<field name="pagamento_data_vencimento" class="java.sql.Date"/>
+	<field name="pagamento_descricao" class="java.lang.String"/>
+	<field name="pagamento_valor" class="java.lang.Double"/>
+	<field name="pagamento_valor_pago" class="java.lang.Double"/>
+	<variable name="TOTAL_POR_TIPO" class="java.lang.Double" resetType="Group" resetGroup="tipo-pagamento" calculation="Sum">
+		<variableExpression><![CDATA[$F{pagamento_valor_pago}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_GERAL" class="java.lang.Double" incrementType="Group" incrementGroup="tipo-pagamento" calculation="Sum">
+		<variableExpression><![CDATA[$V{TOTAL_POR_TIPO}]]></variableExpression>
+	</variable>
+	<group name="tipo-pagamento">
+		<groupExpression><![CDATA[$F{tipo_pagamento_id}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="2" width="555" height="20" backcolor="#F6FDF7" uuid="91b05446-e60d-404d-9190-76b35db59432"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CATEGORIA: "+$F{tipo_pagamento_descricao}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="22" width="82" height="20" uuid="3d97d5cd-76c2-4a7e-a77d-013b4b7c609b"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<text><![CDATA[Vencimento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="82" y="22" width="77" height="20" uuid="d11bdcbe-7b30-4c68-838b-b9a77c2ff2bd"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<text><![CDATA[Pagamento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="159" y="22" width="220" height="20" uuid="f958a95b-85fa-49c5-97e6-70d5d1a21baf"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<text><![CDATA[Descriçao]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="379" y="22" width="88" height="20" uuid="313f7601-b664-46cf-b26b-e706cbb352d3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<text><![CDATA[Valor]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="467" y="22" width="88" height="20" uuid="a927c2b5-7ba9-4822-874e-999d0f62fd84"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<text><![CDATA[Pago]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="¤ #,##0.00">
+					<reportElement mode="Opaque" x="379" y="0" width="176" height="20" backcolor="#F2F5F4" uuid="3cf05844-08e8-45ca-891a-626f6cb602e7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Courier New"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TOTAL PARCIAL: "+NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format($V{TOTAL_POR_TIPO})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="59" splitType="Stretch">
+			<rectangle radius="5">
+				<reportElement x="0" y="0" width="555" height="59" forecolor="#F6F8F8" backcolor="#F7FBF3" uuid="a1a33db3-8048-4fa6-8d33-0df73dfad4c5"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="39" uuid="bd47a1ee-9db4-40f6-a9fb-0cc5f4477019"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="25"/>
+				</textElement>
+				<text><![CDATA[Pagamentos por período]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="39" width="555" height="20" uuid="d5539747-e185-4f2f-9a30-7bb00b16790c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_INICIAL}).concat(" à ").concat(new SimpleDateFormat("dd/MM/yyyy").format($P{DATA_FINAL}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="82" height="20" uuid="a7550f8c-2714-4a94-8c3c-6b1e8c1774c7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagamento_data_vencimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="82" y="0" width="77" height="20" uuid="9b1bac95-016e-499d-a34a-d535d1e00726"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagamento_data_pagamento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="159" y="0" width="220" height="20" uuid="6d4900da-0a15-41f2-80c3-e375d1953a6a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagamento_descricao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="379" y="0" width="88" height="20" uuid="b6cd3ed2-e68e-4e16-b8c6-9ada4c5a652a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagamento_valor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="467" y="0" width="88" height="20" uuid="2d9d49e5-8b44-4150-bb15-c87566d2e10d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagamento_valor_pago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="516" height="20" uuid="304cd079-66a6-4fba-896c-5ae9443a30d4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="6"/>
+				</textElement>
+				<text><![CDATA[CONTROLE FINANCEIRO - DESENVOLVIDO POR DANIEL TAVARES, EMAIL jdanielts1@gmail.com, CELULAR (88)99792.6700]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="516" y="0" width="39" height="20" uuid="bd93094c-741a-42d5-92b6-7f000b855da3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="22">
+			<textField pattern="¤ #,##0.00">
+				<reportElement mode="Opaque" x="379" y="2" width="176" height="20" backcolor="#FDECEB" uuid="e27835f3-f5d0-467a-ac9a-c143c6ba2a3e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL GERAL: "+NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format($V{TOTAL_GERAL})]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

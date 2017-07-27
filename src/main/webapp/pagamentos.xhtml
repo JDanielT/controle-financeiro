@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pagamentos</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="index.xhtml"> 
+            <ui:define name="conteudo">
+
+                <div class="panel-heading">Filtro</div>
+                <div class="panel-body">
+                    <h:form>
+
+                        <h:messages id="msg"
+                                    styleClass="alert"
+                                    errorClass="alert-danger"
+                                    infoClass="alert-info"
+                                    warnClass="alert-warning"
+                                    />
+
+                        <div class="row">
+                            <div class="col-lg-3" float="left">
+                                Data Inicial<br/>
+                                <h:inputText styleClass="form-control data"
+                                             value="#{pagamentoBean.dataInicial}"
+                                             required="true"
+                                             requiredMessage="O campo data inicial é requerido" >
+
+                                    <f:convertDateTime pattern="dd/MM/yyyy" 
+                                                       timeZone="America/Sao_Paulo" />
+
+                                </h:inputText> 
+                            </div>
+                            <div class="col-lg-3" float="left" >
+                                Data Final<br/>
+                                <h:inputText styleClass="form-control data"
+                                             value="#{pagamentoBean.dataFinal}"
+                                             required="true"
+                                             requiredMessage="O campo data final é requerido">
+
+                                    <f:convertDateTime pattern="dd/MM/yyyy" 
+                                                       timeZone="America/Sao_Paulo" />
+
+                                </h:inputText>
+                            </div>
+                            <div class="col-lg-3" float="left">
+                                Status
+                                <h:selectOneRadio value="#{pagamentoBean.status}" >
+                                    <f:selectItem itemLabel="Todos" itemValue="TODOS" />
+                                    <f:selectItem itemLabel="Pagos" itemValue="PAGOS" />
+                                    <f:selectItem itemLabel="Não Pagos" itemValue="NAO_PAGOS" />
+                                </h:selectOneRadio>
+                            </div>
+                            <div class="col-lg-3" float="left" >
+                                <br/>
+                                <h:commandButton value="Buscar"
+                                                 styleClass="btn btn-primary" >
+                                    <f:ajax execute="@form" 
+                                            render="msg :formPagamentos:dtPagamentos"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+
+                <div class="panel-heading">Pagamentos</div>
+                <div class="panel-body">
+
+                    <h:form id="formPagamentos" 
+                            prependId="false" >
+
+                        <h:commandButton value="Novo"
+                                         styleClass="btn btn-primary"
+                                         style="margin-bottom: 10px"
+                                         action="#{pagamentoBean.irParaPaginaCadastroEdicao()}"
+                                         onclick="this.form.target = '_self'" />
+
+                        <h:commandButton value="Imprimir"
+                                         onclick="this.form.target = '_blank'"
+                                         styleClass="btn btn-primary"
+                                         style="margin-left: 5px; margin-bottom: 10px"
+                                         action="#{pagamentoBean.imprimirRelatorio()}" />
+
+                        <h:dataTable id="dtPagamentos"
+                                     value="#{pagamentoBean.itens}"
+                                     var="pagamento" 
+                                     styleClass="table table-responsive table-responsive-action">
+                            <h:column>
+                                <f:facet name="header">
+                                    Descrição
+                                </f:facet>
+                                <h:outputText value="#{pagamento.descricao.toUpperCase()}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Vencimento
+                                </f:facet>
+                                <h:outputText value="#{pagamento.dataVencimento}"
+                                              style="color: red" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Pagamento
+                                </f:facet>
+                                <h:outputText value="#{pagamento.dataPagamento}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Valor Pago
+                                </f:facet>
+                                <h:outputText value="#{pagamento.valorPago}" >
+                                    <f:convertNumber type="currency" 
+                                                     locale="pt_BR"
+                                                     />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Opções
+                                </f:facet>
+                                <div>
+                                    <h:link style="margin-right: 5px"
+                                            outcome="pagamento.xhtml?id=#{pagamento.id}" >
+                                        <i class="fa fa-lg fa-pencil-square-o"></i>
+                                    </h:link>
+                                    <h:commandLink onclick="return confirm('Deseja realmente excluir esse registro?');"
+                                                   action="#{pagamentoBean.excluir}">
+                                        <i class="fa fa-lg fa-times"></i>
+                                        <f:setPropertyActionListener value="#{pagamento}"
+                                                                     target="#{pagamentoBean.entity}" />
+                                    </h:commandLink>
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+
+                    </h:form>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

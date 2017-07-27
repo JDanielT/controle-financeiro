@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" 
+      xmlns:o="http://omnifaces.org/ui">
+    <h:head>
+        <title>Redefiniçao de Senha</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="index.xhtml"> 
+
+            <ui:define name="conteudo">
+
+                <div class="panel-heading">Redefinição de Senha</div>
+                <div class="panel-body" style="max-width: 600px">
+
+                    <h:form id="formRedefinicao" 
+                            prependId="false" >
+
+                        <o:highlight styleClass="invalid-field" />
+
+                        <h:panelGrid style="width: 100%" >
+
+                            <h:messages styleClass="alert"
+                                        errorClass="alert-danger"
+                                        infoClass="alert-info"
+                                        warnClass="alert-warning"/>
+
+                            <h:panelGroup>
+                                <h:outputLabel value="E-mail" />
+                                <h:inputText id="txtDescricao"
+                                             value="#{usuarioBean.emailParaRedefinicao}"
+                                             styleClass="form-control" 
+                                             pt:autofocus="true"
+                                             required="true" 
+                                             requiredMessage="O campo e-mail é requerido" />
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+
+                        <hr/>
+
+                        <div style="float: right" >
+
+                            <h:commandButton value="Enviar"
+                                             action="#{usuarioBean.redefinirSenha()}"
+                                             styleClass="btn btn-primary" />
+
+                            <h:link value="Ir para login"
+                                    style="margin-right: 5px; float: left;"
+                                    outcome="login"
+                                    styleClass="btn" />
+
+                        </div>
+
+                    </h:form>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
